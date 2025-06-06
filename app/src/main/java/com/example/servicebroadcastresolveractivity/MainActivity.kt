@@ -112,6 +112,11 @@ class MainActivity : AppCompatActivity() {
         val currentNameList = mutableListOf<String>()
         val cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
 
+        if(cursor == null){
+            Log.i("Cause", "Курсор nullable")
+            return emptyList()
+        }
+
         cursor?.use {
             while (it.moveToNext()){
                 val name = it.getString(it.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME))
