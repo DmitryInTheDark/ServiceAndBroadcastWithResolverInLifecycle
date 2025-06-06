@@ -65,7 +65,6 @@ class MainActivity : AppCompatActivity() {
         val rcView = findViewById<RecyclerView>(R.id.RCView)
         rcView.adapter = adapter
         rcView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        adapter.addAllNames(getContact())
         when{
             ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
                     == PackageManager.PERMISSION_GRANTED -> {
