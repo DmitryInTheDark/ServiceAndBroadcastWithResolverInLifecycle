@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
         cursor?.use {
             while (it.moveToNext()){
                 val name = it.getString(it.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME))
-                currentNameList.add(name)
+                if (name == null) return currentNameList else currentNameList.add(name)
             }
         }
         return currentNameList
