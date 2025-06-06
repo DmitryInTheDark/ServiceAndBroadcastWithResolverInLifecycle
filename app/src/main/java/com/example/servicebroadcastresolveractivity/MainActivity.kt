@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         val rcView = findViewById<RecyclerView>(R.id.RCView)
         rcView.adapter = adapter
         rcView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
+        adapter.addAllNames(getContact())
         when{
             ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
                     == PackageManager.PERMISSION_GRANTED -> {
@@ -77,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                 permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
             }
         }
+
     }
 
     override fun onStart() {
@@ -109,8 +111,17 @@ class MainActivity : AppCompatActivity() {
 
     //Метод для получения контактов
     private fun getContact(): List<String>{
+
+        var cursor: Cursor?
         val currentNameList = mutableListOf<String>()
-        val cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
+
+        try {
+            cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
+        }catch (e: Exception){
+            Log.i("Cause", "Курсор nullable в блоке try")
+            cursor = null
+        }
+
 
         if(cursor == null){
             Log.i("Cause", "Курсор nullable")
