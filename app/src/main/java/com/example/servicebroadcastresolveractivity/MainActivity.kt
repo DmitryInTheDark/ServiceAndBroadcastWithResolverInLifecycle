@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
         if (it){
-            adapter.addAllNames(getContact())
+            it
         }else{
             Toast.makeText(this, "Включайте разрешение в настройках теперь", Toast.LENGTH_LONG).show()
         }
