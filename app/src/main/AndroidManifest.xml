@@ -15,6 +15,7 @@
         android:theme="@style/Theme.ServiceBroadcastResolverActivity"
         tools:targetApi="31">
         <service android:name=".MyService"/>
+        <receiver android:name=".MyReceiver" android:exported="true"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

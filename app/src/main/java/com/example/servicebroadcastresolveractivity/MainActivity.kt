@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -43,11 +44,8 @@ class MainActivity : AppCompatActivity() {
         var isServiceStarted = false
         receiver = MyReceiver()
 
-        //Регистрация receiver и интент фильтра
-        val filter = IntentFilter(Intent.ACTION_POWER_CONNECTED)
-        filter.addAction(Intent.ACTION_POWER_DISCONNECTED)
 
-        registerReceiver(receiver, filter)
+
 
         //Кнопка для запуска и остановки сервиса
         findViewById<Button>(R.id.button).setOnClickListener {
@@ -74,15 +72,19 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Нужно теперь в настройках включать разрешение", Toast.LENGTH_LONG).show()
             }
             else->{
-                permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+                    permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+                }
             }
         }
-
-    }
 
     override fun onStart() {
         super.onStart()
         Log.d(TAG_LIFECYCLE, "onStart()")
+        //Регистрация receiver и интент фильтра
+        val filter = IntentFilter(Intent.ACTION_POWER_CONNECTED)
+        filter.addAction(Intent.ACTION_POWER_DISCONNECTED)
+
+        registerReceiver(receiver, filter)
     }
 
     override fun onResume() {
@@ -93,6 +95,9 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         Log.d(TAG_LIFECYCLE, "onPause()")
+        //Отписка от получения интентов
+        unregisterReceiver(receiver)
+
     }
 
     override fun onStop() {
@@ -104,8 +109,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         Log.d(TAG_LIFECYCLE, "onDestroy()")
 
-        //Отписка от получения интентов
-        unregisterReceiver(receiver)
+
     }
 
     //Метод для получения контактов
