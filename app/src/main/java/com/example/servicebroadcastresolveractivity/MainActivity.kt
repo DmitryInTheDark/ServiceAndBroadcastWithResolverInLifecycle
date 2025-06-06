@@ -24,6 +24,15 @@ const val TAG_LIFECYCLE = "Lifecycle"
 class MainActivity : AppCompatActivity() {
 
     private lateinit var receiver: MyReceiver
+    private lateinit var adapter: RCAdapter
+
+    val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
+        if (it){
+            adapter.addAllNames(getContact())
+        }else{
+            Toast.makeText(this, "Включайте разрешение в настройках теперь", Toast.LENGTH_LONG).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Инициализация адаптера и RecyclerView
-        val adapter = RCAdapter()
+        adapter = RCAdapter()
         val rcView = findViewById<RecyclerView>(R.id.RCView)
         rcView.adapter = adapter
         rcView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -65,13 +74,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Нужно теперь в настройках включать разрешение", Toast.LENGTH_LONG).show()
             }
             else->{
-                   val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
-                       if (it){
-                           adapter.addAllNames(getContact())
-                       }else{
-                           Toast.makeText(this, "Включайте разрешение в настройках теперь", Toast.LENGTH_LONG).show()
-                       }
-                   }
                 permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
             }
         }
